@@ -66,10 +66,10 @@
                         </div>
         
                         <select class="form-select" aria-label="Default select example" th:field="*{profesor}">
-                            <option selected value="0">Open this select menu</option>
-                            <!--
-                            <option th:each="prof ${profesoresList}" th:value="${prof.idProfesor}" th:text="${prof.nombreProfesor}">One</option>
-                            -->
+                            <option selected value="0">Profesores</option>
+                            
+                            <option th:each="prof:${profesoresList}" th:value="${prof.idProfesor}" th:text="${prof.nombreProfesor + ' ' + prof.apellidoProfesor}"></option>
+                            
                           </select>
 
                         <input type="hidden" th:field="*{idCurso}"/>

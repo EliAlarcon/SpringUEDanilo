@@ -50,7 +50,7 @@
     <section class="masthead page-section" id="contact">
         <div class="container">
             <!-- Contact Section Heading-->
-            <h2 class="page-section-heading text-center text-uppercase text-secondary">Lista de Estudiantes</h2>
+            <h2 class="page-section-heading text-center text-uppercase text-secondary">Cursos</h2>
             <!-- Icon Divider-->
             <div class="divider-custom">
                 <div class="divider-custom-line"></div>
@@ -67,8 +67,6 @@
                             <th scope="col">Grado</th>
                             <th scope="col">Paralelo</th>
                             <th scope="col">Profesor</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
                         </tr>
                     </thead>
@@ -77,18 +75,15 @@
                             <td th:text="${curs.idCurso}"></td>
                             <td th:text="${curs.grado}"></td>
                             <td th:text="${curs.paralelo}"></td>
-                            <td th:text="${curs.profesor.nombreProfesor}"></td>
-                            <td><a th:href="@{/estudiante/editar/}+${est.idEstudiante}"
-                                    class="btn btn-outline-warning btn-sm">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                            </td>
-                            <td><a th:href="@{/estudiante/eliminar/}+${est.idEstudiante}"
+                            <td th:text="${curs.profesor.nombreProfesor + ' ' + curs.profesor.apellidoProfesor}"></td>
+                                                        
+                            <td><a th:href="@{/curso/eliminar/}+${curs.idCurso}"
                                     class="btn btn-outline-danger btn-sm"
                                     onclick="return confirm('¿Seguro que deseas eliminar el regisro?')">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
+                            
                         </tr>
                     </tbody>
                 </table>

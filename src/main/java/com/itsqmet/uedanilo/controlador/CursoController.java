@@ -13,10 +13,8 @@ import com.itsqmet.uedanilo.servicios.impl.CursoServiceImpl;
 import com.itsqmet.uedanilo.servicios.impl.ProfesorServiceImpl;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Controller
@@ -45,12 +43,27 @@ public class CursoController {
         return "curso/formCurso";
     }
 
-    /*@PostMapping("/curso/registro")
-    public String postMethodName(Curso curso) {
+    @PostMapping("/curso/registro")
+    public String crearCurso(Curso curso) {
         cursoServiceImpl.createCurso(curso);
         
         return "redirect:/cursos";
-    }*/
+    }
+
+    //UPDATE
+    @GetMapping("/curso/editar/{id}/{idProfesor}")
+    public String updateCurso(@PathVariable Integer id, @PathVariable Integer idProfesor, Model model){
+        Optional<Curso> curso = cursoServiceImpl.getCursoId(id);
+        Optional<Profesor> profesor = profesorServiceImpl.getProfesorId(idProfesor);
+        model.addAttribute("curso", curso);
+        model.addAttribute("profesor", profesor);
+        return "curso/formCurso";
+    }
     
-    
+    //DELETE
+    @GetMapping("/curso/eliminar/{id}")
+    public String deleteCurso(@PathVariable Integer id){
+        cursoServiceImpl.deleteCurso(id);
+        return "redirect:/cursos";
+    }
 }

@@ -27,7 +27,7 @@ public class Curso implements Serializable{
     private String grado;
     private char paralelo;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "idProfesor")
     private Profesor profesor;
     
