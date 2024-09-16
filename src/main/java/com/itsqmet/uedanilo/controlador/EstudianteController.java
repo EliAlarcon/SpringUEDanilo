@@ -1,68 +1,62 @@
 package com.itsqmet.uedanilo.controlador;
 
 import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.itsqmet.uedanilo.modelo.entidades.Estudiante;
 import com.itsqmet.uedanilo.servicios.impl.EstudianteServiceImpl;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@RestController
+
+
+
+
+@Controller
 public class EstudianteController {
 
     @Autowired
     private EstudianteServiceImpl estudianteServiceImpl;
 
-    @PostMapping("/estudiante")
-    public ResponseEntity<Estudiante> createEstudiante(@RequestBody Estudiante estudiante) {
-        try {
-            Estudiante savedEstudiante = estudianteServiceImpl.createEstudiante(estudiante);
-            return new ResponseEntity<>(savedEstudiante, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PutMapping("/estudiante")
-    public ResponseEntity<Estudiante> updateEstudiante(@RequestBody Estudiante estudiante){
-        try {
-            Estudiante updatedEstudiante = estudianteServiceImpl.updateEstudiante(estudiante);
-            return new ResponseEntity<>(updatedEstudiante, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
+    //READ
     @GetMapping("/estudiantes")
-    public ResponseEntity<List<Estudiante>> getEstudiantes(){
-        return new ResponseEntity<>(estudianteServiceImpl.getEstudiantes(), HttpStatus.OK);
+    public String getEstudiantes(Model model) {
+        List<Estudiante> estudiantes = estudianteServiceImpl.getEstudiantes();
+        model.addAttribute("estudiantes", estudiantes);
+        return "estudiante/listarEstudiantes";
     }
 
-    @GetMapping("/estudiantes/{id}")
-    public ResponseEntity<Estudiante> getEstudianteById(@PathVariable Integer id){
-        Optional<Estudiante> estudiante = estudianteServiceImpl.getEstudianteId(id);
-        if (estudiante.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(estudiante.get(), HttpStatus.OK);
+    //CREATE
+    @GetMapping("/estudiante/registro")
+    public String formulario(Model model) {
+        model.addAttribute("estudiante", new Estudiante());
+        return "estudiante/formEstudiante";
     }
 
-    @DeleteMapping("/estudiantes/{id}")
-    public ResponseEntity<Void> deleteEstudiante(@PathVariable Integer id){
-        Optional<Estudiante> estudiante = estudianteServiceImpl.getEstudianteId(id);
-        if (estudiante.isPresent()) {
-            estudianteServiceImpl.deleteEstudiante(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PostMapping("/estudiante/registro")
+    public String crearEstudiante(Estudiante estudiante) {
+        estudianteServiceImpl.createEstudiante(estudiante);
+        return "redirect:/estudiantes";
     }
+    
+    //UPDATE
+    @GetMapping("/estudiante/editar/{id}")
+    public String formulario(@PathVariable Integer id, Model model){
+        Optional<Estudiante> estudiante = estudianteServiceImpl.getEstudianteId(id);
+        model.addAttribute("estudiante", estudiante);
+        return "estudiante/formEstudiante";
+    }
+
+    //DELETE
+    @GetMapping("/estudiante/eliminar/{id}")
+    public String deleteEstudiante(@PathVariable Integer id) {
+        estudianteServiceImpl.deleteEstudiante(id);
+        return "redirect:/estudiantes";
+    }
+    
+    
 }
